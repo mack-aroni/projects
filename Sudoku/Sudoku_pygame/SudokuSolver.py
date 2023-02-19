@@ -1,0 +1,67 @@
+import numpy as np
+# from dokusan import generators
+
+
+class Sudoku_Solver:
+
+    def __init__(self, grid_o):
+        self.grid_o = grid_o
+        # counter
+        self.count = 0
+        self.grid = [[0 for i in range(9)] for j in range(9)]
+        self.subgrid_has_val = [
+            [[False for i in range(10)] for j in range(3)] for k in range(3)]
+        self.row_has_val = [[False for i in range(10)] for j in range(9)]
+        self.col_has_val = [[False for i in range(10)] for j in range(9)]
+
+    def placeVal(self, val, row, col):
+        self.grid[row][col] = val
+        self.subgrid_has_val[row // 3][col // 3][val] = True
+        self.row_has_val[row][val] = True
+        self.col_has_val[col][val] = True
+
+    def removeVal(self, val, row, col):
+        self.grid[row][col] = 0
+        self.subgrid_has_val[row // 3][col // 3][val] = False
+        self.row_has_val[row][val] = False
+        self.col_has_val[col][val] = False
+
+    def isSafe(self, val, row, col):
+        return not (self.row_has_val[row][val] or
+                    self.col_has_val[col][val] or
+                    self.subgrid_has_val[row // 3][col // 3][val])
+
+    def solveRB(self, n):
+        self.count += 1
+        row = n // 9
+        col = n % 9
+        if (n == 81):
+            return True
+        if (str(self.grid_o[row][col]) != "0"):
+            return self.solveRB(n + 1)
+        for i in range(1, 10):
+            # print("i: "+str(i)+" row: "+str(row)+" " +str(row//3)+" col: "+str(col)+" "+str(col//3))
+            if (self.isSafe(i, row, col)):
+                self.placeVal(i, row, col)
+                if (self.solveRB(n + 1)):
+                    return True
+                self.removeVal(i, row, col)
+        return False
+
+    def solve(self):
+        for r in range(9):
+            for c in range(9):
+                self.placeVal(int(self.grid_o[r][c]), r, c)
+        foundSol = self.solveRB(0)
+        if (foundSol):
+            return self.grid, self.count
+
+
+'''
+grid_original = np.array(
+    list(str(generators.random_sudoku(avg_rank=150)))).reshape(9, 9)
+x = Sudoku_Solver(grid_original)
+grid, count = x.solve()
+print(np.array(grid))
+print(count)
+'''
