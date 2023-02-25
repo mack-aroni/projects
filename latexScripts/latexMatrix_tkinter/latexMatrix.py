@@ -80,7 +80,7 @@ def rowReduce(A, i, j, pivot):
 # return the reduced row echelon form matrix of B
 def backsubstitution(B):
     global latexString
-    C = forwardElimination(B)
+    C = B.copy().astype(float)
     # iterates from the end of the matrix to the front
     for i in reversed(range(len(C))):
         # finds the non-zero indexes of the row
@@ -155,8 +155,10 @@ def run():
     try:
         matrix = np.array(temp_list)
         print(matrix)
+        # performs forward elimination on the matrix
+        matrix_new = forwardElimination(matrix)
         # perform backsubstitution on matrix
-        backsubstitution(matrix)
+        backsubstitution(matrix_new)
         # displays output on the output screen
         out_text.configure(state=NORMAL)
         out_text.delete("1.0", "end-1c")
