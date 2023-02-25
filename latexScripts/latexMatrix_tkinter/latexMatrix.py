@@ -120,7 +120,7 @@ def printMatrix(A):
 # checks if x in a num if true returns as an integer or float
 # else returns False
 def isInt(x):
-    try: 
+    try:
         if (float(x).is_integer()):
             return int(x)
         return float(x)
@@ -145,7 +145,8 @@ def run():
         for x in row.split(" "):
             # checks if x is not a number
             # else adds it to nums
-            if (isInt(x) != False):
+            print(x,isInt(x))
+            if (isInt(x) == 0 or isInt(x) != False):
                 nums.append(float(x))
         # adds each row of nums onto temp_list
         temp_list.append(nums)
@@ -153,8 +154,8 @@ def run():
     # attempts to create a matrix from temp_list
     # an error means an invalid input was inserted
     try:
+        print(temp_list) # input testing
         matrix = np.array(temp_list)
-        print(matrix)
         # performs forward elimination on the matrix
         matrix_new = forwardElimination(matrix)
         # perform backsubstitution on matrix
