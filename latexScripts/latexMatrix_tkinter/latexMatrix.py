@@ -146,15 +146,17 @@ def run():
             # checks if x is not a number
             # else adds it to nums
             print(x,isInt(x))
-            if (isInt(x) == 0 or isInt(x) != False):
+            if (x == "0"):
+                nums.append(float(x))
+            elif (isInt(x) != False):
                 nums.append(float(x))
         # adds each row of nums onto temp_list
         temp_list.append(nums)
     # forms a numpy matrix from temp_list
     # attempts to create a matrix from temp_list
     # an error means an invalid input was inserted
+    print(temp_list) # input testing
     try:
-        print(temp_list) # input testing
         matrix = np.array(temp_list)
         # performs forward elimination on the matrix
         matrix_new = forwardElimination(matrix)
