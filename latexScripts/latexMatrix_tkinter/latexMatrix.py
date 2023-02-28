@@ -145,13 +145,14 @@ def run():
         for x in row.split(" "):
             # checks if x is not a number
             # else adds it to nums
-            print(x,isInt(x))
             if (x == "0"):
                 nums.append(float(x))
             elif (isInt(x) != False):
                 nums.append(float(x))
         # adds each row of nums onto temp_list
-        temp_list.append(nums)
+        # skips any empty rows
+        if (len(nums) > 0):
+            temp_list.append(nums)
     # forms a numpy matrix from temp_list
     # attempts to create a matrix from temp_list
     # an error means an invalid input was inserted
