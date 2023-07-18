@@ -1,0 +1,14 @@
+The Sudoku folder was a project to try 2 things, the first
+being to create a more efficient solution than recursive 
+backtracking and the second being to transfer this from Java
+to Pygame.
+
+I got relatively close on the first part, transitioning from
+random input backtracking to creating a priority queue to 
+more efficiently process the next number to place on the board.
+However it wouldn't process playing the number and locking it
+correctly and thus it wouldn't give a correct solution.
+
+I abandonded the second part in favor of just converting the 
+solver from Java to a Python class that could act in the form
+of a script.
