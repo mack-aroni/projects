@@ -1,0 +1,9 @@
+latexScripts is a collection of python scripts I wrote to 
+help solve and convert the proccess of solving matrices to 
+the Latex language which I used in my Linear Algebra class.
+
+The static folder uses an input and output txt to input and
+display the results.
+
+The tkinter folder uses tkinter to create a executable that
+uses two inbuilt displays to display the results
