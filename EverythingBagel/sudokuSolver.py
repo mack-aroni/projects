@@ -1,11 +1,11 @@
 import numpy as np
 from dokusan import generators
 
-'''
+"""
 Sudoku_Solver:
 class that starts with a raw sudoku puzzle and outputs the completed puzzle
 a class is used to better work with variables that would otherwise be glvoals
-'''
+"""
 class Sudoku_Solver:
 
     def __init__(self, origianal_grid):
@@ -22,20 +22,20 @@ class Sudoku_Solver:
         # all 9 columns that hold values 0-10
         self.col_has_val = [[False for i in range(10)] for j in range(9)]
 
-    '''
+    """
     placeVal(val, row, col):
     places the val at the specified value and updates the puzzle accordingly
-    '''
+    """
     def placeVal(self, val, row, col):
         self.grid[row][col] = val
         self.subgrid_has_val[row // 3][col // 3][val] = True
         self.row_has_val[row][val] = True
         self.col_has_val[col][val] = True
 
-    '''
+    """
     removeVal(val, row, col):
     removes the val at the specified value and updates the puzzle accordingly
-    '''
+    """
     def removeVal(self, val, row, col):
         self.grid[row][col] = 0
         self.subgrid_has_val[row // 3][col // 3][val] = False
@@ -47,10 +47,10 @@ class Sudoku_Solver:
                     self.col_has_val[col][val] or
                     self.subgrid_has_val[row // 3][col // 3][val])
 
-    '''
+    """
     solve(n):
     main recursive-backtracking solving function
-    '''
+    """
     def solveRB(self, n):
         self.count += 1
         row = n // 9
@@ -68,10 +68,10 @@ class Sudoku_Solver:
                 self.removeVal(i, row, col)
         return False
 
-    '''
+    """
     solve():
     calls solveRB and returns the finished puzzle
-    '''
+    """
     def solve(self):
         for r in range(9):
             for c in range(9):

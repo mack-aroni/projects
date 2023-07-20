@@ -6,8 +6,6 @@ import warnings
 relError(a,b):
 helper function to compute relative error of a and b
 """
-
-
 def relError(a, b):
     with warnings.catch_warnings():
         warnings.simplefilter("error")
@@ -22,8 +20,6 @@ swapRows(M,i,j):
 swaps rows i and j of matrix M
 works on M in place
 """
-
-
 def swapRows(M, i, j):
     tmp = M[i].copy()
     M[i] = M[j]
@@ -35,8 +31,6 @@ rowReduce(M,i,j,p):
 reduce row j using row i with pivot p in matrix M
 works on M in place
 """
-
-
 def rowReduce(M, i, j, p):
     factor = float(M[j][p] / M[i][p])
     for k in range(len(M[j])):
@@ -50,8 +44,6 @@ def rowReduce(M, i, j, p):
 rowEchelon(matrix):
 returns the row echelon form of matrix using forward elimination
 """
-
-
 def rowEchelon(matrix):
     M = matrix.copy().astype(float)
     m, n = np.shape(M)
@@ -88,8 +80,6 @@ reducedRowEchelon(matrix):
 returns the reduced row echelon form of matrix using forward
 elimination and backsubstitution
 """
-
-
 def reducedRowEchelon(matrix):
     M = rowEchelon(matrix)
     # iterates from the end of the matrix to the front
@@ -111,8 +101,6 @@ def reducedRowEchelon(matrix):
 matrixSolver():
 parent function that returns solution
 """
-
-
 def matrixSolver(matrix):
     RE = rowEchelon(matrix)
     RRE = reducedRowEchelon(RE)
