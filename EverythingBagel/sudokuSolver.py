@@ -3,12 +3,13 @@ from dokusan import generators
 
 """
 Sudoku_Solver:
-class that starts with a raw sudoku puzzle and outputs the completed puzzle
-a class is used to better work with variables that would otherwise be glvoals
+class that starts with a raw sudoku puzzle and outputs 
+the completed puzzle a class is used to better work with
+variables that would otherwise be globals
 """
 class Sudoku_Solver:
 
-    def __init__(self, origianal_grid):
+    def __init__(self, original_grid):
         self.original_grid = original_grid
         # temp counter
         self.count = 0
@@ -24,7 +25,8 @@ class Sudoku_Solver:
 
     """
     placeVal(val, row, col):
-    places the val at the specified value and updates the puzzle accordingly
+    places the val at the specified value and updates
+    the puzzle accordingly
     """
     def placeVal(self, val, row, col):
         self.grid[row][col] = val
@@ -34,7 +36,8 @@ class Sudoku_Solver:
 
     """
     removeVal(val, row, col):
-    removes the val at the specified value and updates the puzzle accordingly
+    removes the val at the specified value and updates
+    the puzzle accordingly
     """
     def removeVal(self, val, row, col):
         self.grid[row][col] = 0
