@@ -11,6 +11,8 @@ class minesweeper:
         self.size = size
         self.mainBoard = np.array(
             [["-" for i in range(size)] for i in range(size)])
+        self.gameBoard = np.array(
+            [["?" for i in range(size)] for i in range(size)])
         c = 0
         while c < num:
             x = int(rand.random()*size)
@@ -22,45 +24,54 @@ class minesweeper:
     """
     isValid(r,c):
     checks if the coordinates are on the grid
+    and if so returns if the grid contains a mine
     """
-    def isValid(self, x, y):
-        return x >= 0 and x < self.size and y >= 0 and y < self.size
+    def hasMine(self, x, y):
+        if x >= 0 and x < self.size and y >= 0 and y < self.size:
+            return self.mainBoard[x][y] == "*"
 
     """
     chooseTile(x,y)
     """
     def chooseTile(self, x, y):
+        if self.mainBoard[x][y] == "*":
+            #temp
+            print("Gameover")
+            return False
         c = 0
         # left cell
-        if self.isValid(x-1, y):
+        if self.hasMine(x-1, y):
             c = c + 1
         # top left cell
-        if self.isValid(x-1, y-1):
+        if self.hasMine(x-1, y-1):
             c = c + 1
         # bottom left cell
-        if self.isValid(x-1, y+1):
+        if self.hasMine(x-1, y+1):
             c = c + 1
         # top cell
-        if self.isValid(x, y-1):
+        if self.hasMine(x, y-1):
             c = c + 1
         # bottom cell
-        if self.isValid(x, y+1):
+        if self.hasMine(x, y+1):
             c = c + 1
         # right cell
-        if self.isValid(x+1, y):
+        if self.hasMine(x+1, y):
             c = c + 1
         # top right cell
-        if self.isValid(x+1, y-1):
+        if self.hasMine(x+1, y-1):
             c = c + 1
         # bottom right cell
-        if self.isValid(x+1, y+1):
+        if self.hasMine(x+1, y+1):
             c = c + 1
+        # changes the value of the tile to count
+        self.gameBoard[x][y] = str(c)
 
     """
     printBoard():
     formats and prints board
     """
-    def printBoard(self):
+    def printBoard(self,board):
+        # prints top column counter
         s = "    "
         for i in range(size):
             if i < 9:
@@ -68,13 +79,14 @@ class minesweeper:
             else:
                 s = s + "  " + str(i+1)
         print(s)
+        # prints side row counter with row contents
         for r in range(size):
             if r < 9:
                 s = str(r+1) + "   "
             else:
                 s = str(r+1) + "  "
             for c in range(size):
-                s = s + "| " + str(self.mainBoard[r][c]) + " "
+                s = s + "| " + str(board[r][c]) + " "
             s = s + "| "
             print(s)
 
@@ -82,5 +94,10 @@ if __name__ == "__main__":
     size = 9
     num = 10
     game = minesweeper(num,size)
-    game.printBoard()
-    print(game.isValid(8,0))
+    game.printBoard(game.mainBoard)
+    s = input("(row,col): ")
+    while s != "end":
+        s = s.split(" ")
+        game.chooseTile(int(s[0])-1,int(s[1])-1)
+        game.printBoard(game.gameBoard)
+        s = input()
