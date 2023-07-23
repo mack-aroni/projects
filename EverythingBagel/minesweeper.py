@@ -26,8 +26,11 @@ class minesweeper:
     checks if the coordinates are on the grid
     and if so returns if the grid contains a mine
     """
+    def isValid(self, x, y):
+        return x >= 0 and x < self.size and y >= 0 and y < self.size
+
     def hasMine(self, x, y):
-        if x >= 0 and x < self.size and y >= 0 and y < self.size:
+        if self.isValid(x,y):
             return self.mainBoard[x][y] == "*"
 
     """
@@ -63,8 +66,48 @@ class minesweeper:
         # bottom right cell
         if self.hasMine(x+1, y+1):
             c = c + 1
+
+        # temp
+        print("Tile: "+str(x+1)+" "+str(y+1)+" count: "+str(c))
+
         # changes the value of the tile to count
         self.gameBoard[x][y] = str(c)
+
+        # if count == 0 iterate until all connecting tiles have count > 0
+        if c == 0:
+            # left cell
+            if self.isValid(x-1, y):
+                if self.gameBoard[x-1][y] == "?":
+                    self.chooseTile(x-1,y)
+            # top left cell
+            if self.isValid(x-1, y-1):
+                if self.gameBoard[x-1][y-1] == "?":
+                    self.chooseTile(x-1,y-1)
+            # bottom left cell
+            if self.isValid(x-1, y+1):
+                if self.gameBoard[x-1][y+1] == "?":
+                    self.chooseTile(x-1,y+1)    
+            # top cell
+            if self.isValid(x, y-1):
+                if self.gameBoard[x][y-1] == "?":
+                    self.chooseTile(x,y-1)
+            # bottom cell
+            if self.isValid(x, y+1):
+                if self.gameBoard[x][y+1] == "?":
+                    self.chooseTile(x,y+1)
+            # right cell
+            if self.isValid(x+1, y):
+                if self.gameBoard[x+1][y] == "?":
+                    self.chooseTile(x+1,y)
+            # top right cell
+            if self.isValid(x+1, y-1):
+                if self.gameBoard[x+1][y-1] == "?":
+                    self.chooseTile(x+1,y-1)
+            # bottom right cell
+            if self.isValid(x+1, y+1):
+                if self.gameBoard[x+1][y+1] == "?":
+                    self.chooseTile(x+1,y+1)
+
 
     """
     printBoard():
@@ -100,4 +143,4 @@ if __name__ == "__main__":
         s = s.split(" ")
         game.chooseTile(int(s[0])-1,int(s[1])-1)
         game.printBoard(game.gameBoard)
-        s = input()
+        s = input("(row,col): ")
