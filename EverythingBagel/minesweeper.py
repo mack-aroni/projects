@@ -1,5 +1,4 @@
 import random as rand
-import numpy as np
 
 class minesweeper:
 
@@ -11,10 +10,8 @@ class minesweeper:
         self.count = 0
         self.size = size
         self.num = num
-        self.mainBoard = np.array(
-            [["-" for i in range(size)] for i in range(size)])
-        self.gameBoard = np.array(
-            [["?" for i in range(size)] for i in range(size)])
+        self.mainBoard = [["-" for i in range(size)] for i in range(size)]
+        self.gameBoard = [["?" for i in range(size)] for i in range(size)]
         c = 0
         while c < num:
             x = int(rand.random()*size)
