@@ -46,10 +46,9 @@ class minesweeper:
     if 
     """
     def chooseTile(self, x, y):
+        # mine was selected
         if self.mainBoard[x][y] == "*":
-            #temp
-            print("Gameover")
-            return
+            return 0
         c = 0
         # left cell
         if self.hasMine(x-1, y):
@@ -75,12 +74,13 @@ class minesweeper:
         # bottom right cell
         if self.hasMine(x+1, y+1):
             c = c + 1
-        # temp
-        print("Tile: "+str(x+1)+","+str(y+1)+" count: "+str(c))
         # changes the value of the tile to count
         self.gameBoard[x][y] = str(c)
         self.count = self.count + 1
-        # if count == 0 recursively iterate until all connecting tiles have count > 0
+        # temp
+        print("Tile: "+str(x+1)+","+str(y+1)+" count: "+str(c)+" c: "+str(self.count))
+        # if count == 0 recursively iterate until all 
+        # connecting tiles have count > 0
         if c == 0:
             # left cell
             if self.isValid(x-1, y):
@@ -114,19 +114,37 @@ class minesweeper:
             if self.isValid(x+1, y+1):
                 if self.gameBoard[x+1][y+1] == "?":
                     self.chooseTile(x+1,y+1)
+        # all non-mine tiles have been selected
+        if self.count == (self.size * self.size - self.num):
+            return 1
         
     """
     run():
     main run loop for minesweeper game
     """
     def run(self):
+        # temp prints mainBoard with mines
         game.printBoard(game.mainBoard)
-        s = input("(row,col): ")
-        while self.count == (self.size * self.size - self.num) or s != "end":
-            s = s.split(" ")
-            game.chooseTile(int(s[0])-1,int(s[1])-1)
-            game.printBoard(game.gameBoard)
+        while True:
             s = input("(row,col): ")
+            # input break case
+            if s == "end":
+                break
+            # try, except used to obtain correct inputs
+            try:
+                s = s.split(" ")
+                r = game.chooseTile(int(s[0])-1,int(s[1])-1)
+                # indicates mine was selected
+                if r == 0:
+                    print("Game Over")
+                    break
+                # indicates all non-mine tiles were selected
+                elif r == 1:
+                    print("You Win")
+                    break
+                game.printBoard(game.gameBoard)
+            except:
+                None
 
     """
     printBoard():
@@ -153,7 +171,7 @@ class minesweeper:
             print(s)
 
 if __name__ == "__main__":
-    size = 2#9
-    num = 1#10
+    size = 9
+    num = 10
     game = minesweeper(num,size)
     game.run()
