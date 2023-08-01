@@ -74,8 +74,10 @@ class minesweeper:
         # changes the value of the tile to count
         self.gameBoard[x][y] = str(c)
         self.count = self.count + 1
+
         # temp
         print("Tile: "+str(x+1)+","+str(y+1)+" count: "+str(c)+" c: "+str(self.count))
+        
         # if count == 0 recursively iterate until all 
         # connecting tiles have count > 0
         if c == 0:
@@ -116,6 +118,16 @@ class minesweeper:
             return 1
         
     """
+    markTile(x,y):
+    marks the tile as long as it hasn't
+    been revealed
+    """
+    def markTile(self, x, y):
+        if self.gameBoard[x][y] != "?":
+           return
+        self.gameBoard[x][y] = "!"
+        
+    """
     run():
     main run loop for minesweeper game
     """
@@ -123,13 +135,17 @@ class minesweeper:
         # temp prints mainBoard with mines
         game.printBoard(game.mainBoard)
         while True:
-            s = input("(row,col): ")
+            game.printBoard(game.gameBoard)
+            s = input("(row,col): ").split(" ")
             # input break case
-            if s == "end":
+            if len(s) == 1 and s[0] == "end":
                 break
-            # try, except used to obtain correct inputs
-            try:
-                s = s.split(" ")
+            # flagging case
+            if len(s) == 3:
+                if s[0] == "flag" and int(s[1])-1 <= self.size and int(s[2])-1 <= self.size:
+                    game.markTile(int(s[1])-1,int(s[2])-1)
+            # tile choosing case
+            if len(s) == 2:
                 r = game.chooseTile(int(s[0])-1,int(s[1])-1)
                 # indicates mine was selected
                 if r == 0:
@@ -139,9 +155,6 @@ class minesweeper:
                 elif r == 1:
                     print("You Win")
                     break
-                game.printBoard(game.gameBoard)
-            except:
-                None
 
     """
     printBoard():
