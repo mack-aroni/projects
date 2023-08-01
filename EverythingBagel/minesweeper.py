@@ -150,25 +150,24 @@ class minesweeper:
     def printBoard(self,board):
         # prints top column counter
         s = "    "
-        for i in range(size):
+        for i in range(self.size):
             if i < 9:
                 s = s + "  " + str(i+1) + " "
             else:
                 s = s + "  " + str(i+1)
         print(s)
         # prints side row counter with row contents
-        for r in range(size):
+        for r in range(self.size):
             if r < 9:
                 s = str(r+1) + "   "
             else:
                 s = str(r+1) + "  "
-            for c in range(size):
+            for c in range(self.size):
                 s = s + "| " + str(board[r][c]) + " "
             s = s + "| "
             print(s)
 
 if __name__ == "__main__":
-    size = 9
-    num = 10
-    game = minesweeper(num,size)
+    BEGINNER = [10,9]
+    game = minesweeper(BEGINNER[0],BEGINNER[1])
     game.run()
