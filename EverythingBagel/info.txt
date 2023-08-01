@@ -1,0 +1,11 @@
+EverythingBagel is a more centralized collection 
+of random projects and ideas from class projects
+and other directories in this repo.
+
+matrixSolver takes an augmented matrix user input
+and outputs the row reduced echelon form solution
+
+minesweeper simulates a minesweeper game
+
+sudokuSolver is the Python port of my other Java
+sudokuSolver
