@@ -5,7 +5,8 @@ and other directories in this repo.
 matrixSolver takes an augmented matrix user input
 and outputs the row reduced echelon form solution
 
-minesweeper simulates a minesweeper game
+minesweeper simulates a minesweeper game solely through
+using user input
 
 sudokuSolver is the Python port of my other Java
 sudokuSolver
