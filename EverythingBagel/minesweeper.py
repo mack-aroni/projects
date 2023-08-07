@@ -71,9 +71,11 @@ class minesweeper:
         # mine was selected
         if self.mainBoard[x][y] == "*":
             return 0
-        # already revealed tile was selected
+        
+        # if an already revealed tile was selected
         if self.gameBoard[x][y] != "?":
-            return
+            return 
+
         # changes the value of the tile to count
         c = self.__countAdjacent(x,y,"*")
         self.gameBoard[x][y] = str(c)
