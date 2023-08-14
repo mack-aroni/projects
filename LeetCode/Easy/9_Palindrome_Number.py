@@ -1,7 +1,7 @@
 import math
 
 """
-9. Palindrome Number
+9. PALINDROME NUMBER
 Given an integer x, return true if x is a
 palindrome, and false otherwise.
 """
