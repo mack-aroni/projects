@@ -14,7 +14,7 @@ You can return the answer in any order.
 first solution
 brute force
 1. iterate over nums
-2. iterate forward over i, len(nums)
+2. iterate forward over i, from 0 to len(nums) -1
 3. if nums[i] + nums[j] == target, return i, j
 """
 def twoSum(nums, target):
