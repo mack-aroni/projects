@@ -15,10 +15,6 @@ not using strings
 eliminating front and back ints as we go
 """
 def isPalindrome(x):
-    """
-    :type x: int
-    :rtype: bool
-    """
     if (x == 0):
         return True
     if (x < 0):
