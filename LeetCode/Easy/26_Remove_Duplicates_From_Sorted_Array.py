@@ -10,6 +10,7 @@ Return k.
 
 """
 first solution:
+(115ms/20.20%)(14.4MB/73.79%)
 brute force
 1. iterate over nums, from 0 to len-1
 2. if duplicate, pop from nums and resume at i
@@ -28,6 +29,7 @@ def removeDuplicates(nums):
 
 """
 second solution:
+(57ms/84.77%)(14.8MB/26.8%)
 replace in place
 1. static j holds index
 2. iterate over nums from 1 to len
