@@ -23,6 +23,7 @@ def LList(list):
 
 """
 first solution:
+(21ms/60.86%)(13.2MB/96.97%)
 iterate over both LLists
 1. set list3 and head node
 2. iterate over each list
@@ -30,16 +31,22 @@ iterate over both LLists
 rest of the remaining list to list3
 """
 def mergeTwoLists(list1, list2):
+    #create list and dummy head
     list3 = head = ListNode()
+    #iterate over both lists until one is empty
     while list1 and list2:
         if list1.val < list2.val:
+            #set list3.next
             list3.next = list1
+            #iterate to list3.next
             list3 = list3.next
+            #iterate list1 to list1.next
             list1 = list1.next
         else:
             list3.next = list2
             list3 = list3.next
             list2 = list2.next
+    #if there is remaining nodes, attach to list3
     if list1 or list2:
         list3.next = list1 if list1 else list2
     return head.next
