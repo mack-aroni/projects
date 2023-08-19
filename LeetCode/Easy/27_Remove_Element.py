@@ -17,6 +17,7 @@ Return k.
 
 """
 first solution:
+(18ms/59.77%)(13.2MB/88.54%)
 change list
 1. using static i, iterate over nums
 2. if nums[i] == val, pop it off the list
@@ -35,6 +36,7 @@ def removeElement(nums, val):
 
 """
 second solution:
+(20ms/44.37%)(13.26MB/56.53%)
 replace in place
 1. static j holds index
 2. iterate over nums
@@ -51,6 +53,7 @@ def removeElement_2(nums, val):
 
 """
 solution(not in place):
+(11ms/96.17%)(13.36MB/24.08%)
 use python to reformat the list
 """
 def removeElement_3(nums, val):
