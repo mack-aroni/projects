@@ -12,6 +12,7 @@ You can return the answer in any order.
 
 """
 first solution
+(2228ms/38.57%)(14.1MB/66.17%)
 brute force
 1. iterate over nums
 2. iterate forward over i, from 0 to len(nums) -1
@@ -26,6 +27,7 @@ def twoSum(nums, target):
             
 """
 better solution
+(31ms/98.28%)(14.2MB/66.17%)
 hashing
 1. iterate over nums
 2. compare target - nums[i]
