@@ -7,6 +7,7 @@ needle is not part of haystack.
 
 """
 first solution:
+(13ms/76.23%)(13.53MB/18.74%)
 brute force
 1. check intial case if needle > haystack
 2. iterate over haystack from pointer c to len
@@ -20,11 +21,13 @@ def strStr(haystack, needle):
     if len(haystack) < len(needle):
         return -1
     index = 0
-    c = 0
-    while c < len(haystack):
+    # from 0-len
+    for c in range(len(haystack)):
         j = 0
+        # from c-len
         for i in range(c,len(haystack)):  
-            print("c:",c,"hay:",haystack[i],"need:",needle[j],"j:",j,"index:",index)
+            #print("c:",c,"hay:",haystack[i],"need:",needle[j],"j:",j,"index:",index)
+            #check until !=, then break, else return index
             if haystack[i] == needle[j]:
                 if j == 0:
                     index = i
@@ -33,11 +36,11 @@ def strStr(haystack, needle):
                 break
             if j == len(needle):
                 return index
-        c = c + 1
     return -1
 
 """
 second solution:
+(12ms/82.30%)(13.4MB/49.43%)
 KMP algorithm
 """
 def strStr(haystack, needle):
