@@ -43,7 +43,7 @@ second solution:
 (12ms/82.30%)(13.4MB/49.43%)
 KMP algorithm
 """
-def strStr(haystack, needle):
+def strStr_2(haystack, needle):
     lps = [0] * len(needle)
     pre = 0
     for i in range(1, len(needle)):
