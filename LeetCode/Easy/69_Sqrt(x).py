@@ -42,5 +42,5 @@ def mySqrt_2(x):
 if __name__ == "__main__":
     x = 8
     print(mySqrt(x))
-    x_1 = 103
-    print(mySqrt(x_1))
+    x2 = 103
+    print(mySqrt(x2))
