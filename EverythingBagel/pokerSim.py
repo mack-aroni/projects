@@ -8,8 +8,9 @@ class pokerGameSim:
                 "C2","C3","C4","C5","C6","C7","C8","C9","C10","CJ","CQ","CK","CA",
                 "S2","S3","S4","S5","S6","S7","S8","S9","S10","SJ","SQ","SK","SA",
                 "H2","H3","H4","H5","H6","H7","H8","H9","H10","HJ","HQ","HK","HA"]
-        self.players = players
+        self.players = players - 1
         self.hand = []
+        self.opHand = []
         self.house = []
 
     """
@@ -18,7 +19,6 @@ class pokerGameSim:
     from the deck
     """
     def __draw(self):
-        #pops random card off the deck to be "drawn"
         c = rand.randint(0,len(self.deck)-1)
         return self.deck.pop(c)
 
@@ -27,48 +27,77 @@ class pokerGameSim:
     private method that deals out the preflop 
     cards to the players hand
     """
-    def preFlop(self):
+    def __preFlop(self):
+        print("PRE-FLOP")
         #draws two cards to be the players hand
-        first = self.__draw()
-        second = self.__draw()
+        self.hand = [self.__draw(), self.__draw()]
+        #draws two cards to each other players hand
+        self.opHand = [[self.__draw(), self.__draw()] for i in range(self.players)]
 
-        self.hand.append(first)
-        self.hand.append(second)
+        print("Hand:", self.__printHand(self.hand))
+        l = [self.__printHand(i) for i in self.opHand]
+        print("opHand:", "".join(l))
+        print("House:",self.__printHand(self.house))
 
-        print("hand:", self.hand)
-        self.evaluate()
+    """
+    flop():
+    private method that deals out the flop 
+    cards to the house
+    """
+    def __flop(self):
+        print("FLOP")
+        self.house = [self.__draw(), self.__draw(), self.__draw()]
 
-    def evaluate(self):
-        high = 0
-        low = 0
-        onTable = self.hand + self.house
-        print("onTable:", onTable)
-        if len(onTable) == 2:
-            high, low = self.__doubles(onTable, high, low)
-            high, low = self.__highCard(onTable, high, low)
-        print(high, low)
+        print("Hand:", self.__printHand(self.hand))
+        l = [self.__printHand(i) for i in self.opHand]
+        print("opHand:", "".join(l))
+        print("House:", self.__printHand(self.house))
+
+    """
+    turn():
+    private method that deals out the turn 
+    card to the house
+    """
+    def __turn(self):
+        print("TURN")
+        self.house.append(self.__draw())
+
+        print("Hand:", self.__printHand(self.hand))
+        l = [self.__printHand(i) for i in self.opHand]
+        print("opHand:", "".join(l))
+        print("House:", self.__printHand(self.house))
+
+    """
+    showdown():
+    final round where the cards are evaluated
+    and a winner is declared
+    """
+    def __showdown(self):
+
         return
 
-    def __doubles(self, onTable, high, low):
-        if self.hand[0][1::] != self.hand[1][1::]:
-             return high + 0, low + (13*6)
-        v = self.val[self.hand[0][1::]]
-        return high + ((v - 2) * 6) + 1, low + ((14 - v) * 6)
-
-    def __highCard(self, onTable, high, low):
-        if high > 0:
-             return high, low + (52*51/2 - (high + low))
-        list = sorted([x[1::] for x in onTable], key=lambda x: self.val[x])[::-1]
-        print("list:", list)
-        h = self.val[list[0]]
-        l = self.val[list[1]]
-        high = high + (l - 2) * 4 + 3
-        low = low + (h - l - 1) * 4
-        high = high + (h - 1) * 4 * (h - 2) * 4
-        low = low + (14 - h) * 4 * (14 - h - 1) * 4
-        return high, low
+    """
+    printHand(hand):
+    private method that formats and prints out a hand
+    """
+    def __printHand(self, hand):
+        s = "["
+        for i in range(len(hand)):
+            s = s + hand[i]
+            if i != len(hand)-1:
+                s = s + ", "
+        s = s + "]"
+        return s
+    
+    def run(self):
+        self.__preFlop()
+        print()
+        self.__flop()
+        print()
+        self.__turn()
+        self.__showdown()
 
 if __name__ == "__main__":
     #for i in range(10):
         game = pokerGameSim(4)
-        game.preFlop()
+        game.run()
