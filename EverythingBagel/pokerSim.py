@@ -118,9 +118,10 @@ class pokerGameSim:
         
         #find highest quad/trips/pairs/highcard
         elif rank in [3,7,9,10]:
-            highest = max(hands, key=lambda c: self.rank[c[1]])
+            highest = max(hands, key=lambda c: self.rank[c[1][0]])
             return highest[0]
         
+        #compare fullhouses/two pairs/flush by comparing each card by card
         else:
             high = []
             for i in range(len(hands[0][1])):
@@ -129,26 +130,6 @@ class pokerGameSim:
                 if len(high) == 1:
                     return high[0][0]
             return [h[0] for h in hands]
-        
-        #compare fullhouses/two pairs
-        """
-        elif rank == 4 or rank == 8:
-            #compare first value
-            hVal = max(self.rank[h[1][0]] for h in hands)
-            high = [h for h in hands if self.rank[h[1][0]] == hVal]
-            if len(high) == 1:
-                return high[0][0]
-            #compare second value if there are identical first values
-            h2Val = max(self.rank[h[1][1]] for h in high)
-            high = [h for h in hands if self.rank[h[1][1]] == h2Val]
-            if len(high) == 1:
-                return high[0][0]
-            #if tie, return all indexes of ties
-            return [h[0] for h in hands]
-        #compare flushes
-        """
-        
-
 
     """
     preFlop():
@@ -220,13 +201,16 @@ class pokerGameSim:
         print("val",val)
         mVal = min(c[0] for c in val)
         indices = [i for i, v in enumerate(val) if v[0] == mVal]
-        print(indices)
+        print("indices",indices)
 
         #evaluate hands returning one winner
         if len(indices) > 1:
-            winner = self.__findWinner(val[indices[0]][0], [[i,val[i]] for i in indices])
-            if winner == 0: print("You Win")
-            else: print("Player "+str(indices[winner])+" wins")
+            winner = self.__findWinner(val[indices[0]][0], [[i,val[i][1]] for i in indices])
+            if isinstance(winner, int):
+                if winner == 0: print("You Win")
+                else: print("Player "+str(indices[winner])+" wins")
+            else:
+                print("Player",winner,"wins")
         #else if only one player, return winner
         else:
             if indices[0] == 0: print("You Win")
@@ -250,7 +234,6 @@ class pokerGameSim:
     main runloop for pokerSim game
     """
     def run(self):
-        """
         self.__preFlop()
         print()
         self.__flop()
@@ -273,6 +256,7 @@ class pokerGameSim:
         indices = [i for i, v in enumerate(val) if v[0] == mVal]
         winner = self.__findWinner(val[indices[0]][0], [[i,val[i][1]] for i in indices])
         print(winner)
+        """
 
 if __name__ == "__main__":
     #for i in range(10):
