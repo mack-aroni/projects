@@ -12,4 +12,5 @@ sudokuSolver is the Python port of my other Java
 sudokuSolver
 
 pokerSim is an attempt to make a simulated poker game 
-with some additions
+with some additions, focusing on evaluating the ranks of
+poker hands and comparing them to determine a winner
