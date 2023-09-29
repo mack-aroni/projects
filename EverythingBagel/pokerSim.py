@@ -44,7 +44,6 @@ class pokerGameSim:
         #straight
         straight = []
         #check indices 0-5 and 1-6
-        print(table)
         for i in range(2):
             isStraight = True
             for j in range(4):
@@ -70,7 +69,7 @@ class pokerGameSim:
 
         #group cards by occurence of rank
         for c in rTable:
-            if c[1::] in card_count:
+            if c in card_count:
                 card_count[c] += 1
             else:
                 card_count[c] = 1
@@ -115,7 +114,6 @@ class pokerGameSim:
     their original indices and the card combination rank
     """
     def __findWinner(self, rank, hands):
-        print(hands)
         #find highest straight/straight flush by comparing the sum of the ranks
         if rank == 2 or rank == 6:
             for i in range(len(hands)):
@@ -123,17 +121,18 @@ class pokerGameSim:
             highest = max(hands, key=lambda c: c[1])
             return highest[0]
         
-        #find highest quad/trips/pairs/highcard
-        elif rank in [3,7,9,10]:
-            highest = max(hands, key=lambda c: self.rank[c[1][0]])
-            return highest[0]
-        
-        #compare fullhouses/two pairs/flush by comparing each card by card
+        #compare quad/trips/pairs/highcard/fullhouses/two pairs/flush by comparing each card by card (NEED FIX)
         else:
             high = []
-            for i in range(len(hands[0][1])):
-                val = max(self.rank[h[1][i]] for h in hands)
-                high = [h for h in hands if self.rank[h[1][i]] == val]
+            #evaluate first card
+            val = max(self.rank[h[1][0]] for h in hands)
+            high = [h for h in hands if self.rank[h[1][0]] == val]
+            if len(high) == 1:
+                return high[0][0]
+            #evaluate second card
+            if len(high[1][1]) > 1:
+                val2 = max(self.rank[h[1][1]] for h in high)
+                high = [h for h in high if self.rank[h[1][1]] == val2]
                 if len(high) == 1:
                     return high[0][0]
             return [h[0] for h in hands]
@@ -150,10 +149,10 @@ class pokerGameSim:
         #draws two cards to each other players hand
         self.pHands = [[self.__draw(), self.__draw()] for i in range(self.players)]
 
-        print("Hand:", self.__printHand(self.hand))
+        print("Hand:  ", self.__printHand(self.hand))
         l = [self.__printHand(i) for i in self.pHands]
         print("pHands:", "".join(l))
-        print("House:",self.__printHand(self.house))
+        print("House: ",self.__printHand(self.house))
 
     """
     flop():
@@ -165,10 +164,10 @@ class pokerGameSim:
         #draws three cards to the house
         self.house = [self.__draw(), self.__draw(), self.__draw()]
 
-        print("Hand:", self.__printHand(self.hand))
+        print("Hand:  ", self.__printHand(self.hand))
         l = [self.__printHand(i) for i in self.pHands]
         print("pHands:", "".join(l))
-        print("House:", self.__printHand(self.house))
+        print("House: ", self.__printHand(self.house))
 
     """
     turn():
@@ -179,10 +178,10 @@ class pokerGameSim:
         print("TURN")
         #draws an additional card to the house
         self.house.append(self.__draw())
-        print("Hand:", self.__printHand(self.hand))
+        print("Hand:  ", self.__printHand(self.hand))
         l = [self.__printHand(i) for i in self.pHands]
         print("pHands:", "".join(l))
-        print("House:", self.__printHand(self.house))
+        print("House: ", self.__printHand(self.house))
 
     """
     showdown():
@@ -190,36 +189,46 @@ class pokerGameSim:
     and a winner is declared
     """
     def __showdown(self):
+        hRank = {1:"Royal Flush",2:"Straight Flush",3:"Four of a Kind",4:"Full House",5:"Flush",
+                 6:"Straight",7:"Three of a Kind",8:"Two Pair",9:"Pair",10:"High Card"}
         print("SHOWDOWN")
-        #copy pHands and insert player hand at the beginning
+        #merge all hands by copying pHands and insert player hand at the beginning
         hands = [c for c in self.pHands]
         hands.insert(0, self.hand)
         val = []
 
-        #foreach hand add the cards to the house cards and evaluate
-        for h in hands:
+        #foreach hand join the cards with the house cards and evaluate
+        for i,h in enumerate(hands):
             table = h + self.house
             #sort cards by decreasing rank
-            table = sorted([x for x in table], key=lambda x: self.rank[x[1::]])[::-1]    
-            print(self.__printHand(table))
+            table = sorted([x for x in table], key=lambda x: self.rank[x[1::]])[::-1]
+            if i == 0:
+                print("You:     ",self.__printHand(table))
+            else:
+                print("Player "+str(i)+":",self.__printHand(table))
             val.append(self.__evaluate(table))
 
         #find player/s with the highest ranking combinations
         mVal = min(c[0] for c in val)
         indices = [i for i, v in enumerate(val) if v[0] == mVal]
+        handRank = val[indices[0]][0]
+        print(val)
 
         #evaluate hands returning one winner
         if len(indices) > 1:
-            winner = self.__findWinner(val[indices[0]][0], [[i,val[i][1]] for i in indices])
+            winner = self.__findWinner(handRank, [[i,val[i][1]] for i in indices])
             if isinstance(winner, int):
-                if winner == 0: print("You Win")
-                else: print("Player "+str(indices[winner])+" wins")
+                if winner == 0: print("You Win with a "+hRank[handRank])
+                else: print("Player "+str(winner)+" wins with a "+hRank[handRank])
             else:
-                print("Player",winner,"wins")
+                s = ""
+                for w in winner:
+                    s = s + str(w)+" "
+                print("Players "+s+"tie with a "+hRank[handRank])
         #else if only one player, return winner
         else:
-            if indices[0] == 0: print("You Win")
-            else: print("Player "+str(indices[0])+" wins")
+            if indices[0] == 0: print("You Win with a "+hRank[handRank])
+            else: print("Player "+str(indices[0])+" wins with a "+hRank[handRank])
 
     """
     printHand(hand):
