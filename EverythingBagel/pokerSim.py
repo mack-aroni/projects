@@ -28,6 +28,8 @@ class pokerGameSim:
     card combination from the table
     """
     def __evaluate(self, table):
+        #table that only holds ranks, not suit
+        rTable = [h[1::] for h in table]
         #flush
         flush = []
         suits = {"H":[], "D":[], "C":[], "S":[]}
@@ -42,10 +44,15 @@ class pokerGameSim:
         #straight
         straight = []
         #check indices 0-5 and 1-6
-        for i in range(len(table) - 4):
-            if self.rank[table[i][1::]] - 4 == self.rank[table[i + 4][1::]]:
-                straight = [6,[c[1::] for c in table[i:i+5]]]
-                break
+        print(table)
+        for i in range(2):
+            isStraight = True
+            for j in range(4):
+                if self.rank[rTable[j+i]] != self.rank[rTable[j+i+1]] + 1:
+                    isStraight = False
+                    break
+            if isStraight:
+                straight = [6,[c for c in rTable[i:i+5]]]
 
         #royal flush, straight flush
         if len(flush) > 0 and len(straight) > 0 and flush[1] == straight[1]:
@@ -60,12 +67,14 @@ class pokerGameSim:
         pair = []
         card_count = {}
         card_comb = {"Q":[],"T":[],"D":[]}
+
         #group cards by occurence of rank
-        for c in table:
+        for c in rTable:
             if c[1::] in card_count:
-                card_count[c[1::]] += 1
+                card_count[c] += 1
             else:
-                card_count[c[1::]] = 1
+                card_count[c] = 1
+
         #group cards by occurences
         for card, count in card_count.items():
             if count == 4:
@@ -84,15 +93,13 @@ class pokerGameSim:
             return [4, [card_comb["T"][0],card_comb["T"][1]]]
         elif card_comb["T"] and card_comb["D"]:
             return [4,[card_comb["T"][0], card_comb["D"][0]]]
-        
         elif card_comb["T"]:
             trips = [7, card_comb["T"][0]]
-
         elif len(card_comb["D"]) > 1:
             twop = [8, [card_comb["D"][0], card_comb["D"][1]]]
-
         elif card_comb["D"]:
             pair = [9, [card_comb["D"][0]]]
+
         #return highest combo
         if flush: return flush
         elif straight: return straight
@@ -100,7 +107,7 @@ class pokerGameSim:
         elif twop: return twop
         elif pair: return pair
         #highcard
-        else: return [10,[table[0][1::]]]
+        else: return [10,[rTable[0]]]
 
     """
     findWinner(hands):
@@ -198,10 +205,8 @@ class pokerGameSim:
             val.append(self.__evaluate(table))
 
         #find player/s with the highest ranking combinations
-        print("val",val)
         mVal = min(c[0] for c in val)
         indices = [i for i, v in enumerate(val) if v[0] == mVal]
-        print("indices",indices)
 
         #evaluate hands returning one winner
         if len(indices) > 1:
@@ -245,7 +250,7 @@ class pokerGameSim:
         print("\nTESTING")
         val = []
         h1 = ["SK","SQ","SJ","S9","S8","H2"]
-        h2 = ["DK","DQ","DJ","D10","D3","S2"]
+        h2 = ["DK","DQ","DJ","D10","S9","S2"]
         h3 = ["SK","HK","H10","D8","S2","S3"]
         hands = [h1,h2,h3]
         print("hands",hands)
