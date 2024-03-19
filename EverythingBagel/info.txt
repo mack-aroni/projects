@@ -14,3 +14,8 @@ sudokuSolver
 pokerSim is an attempt to make a simulated poker game 
 with some additions, focusing on evaluating the ranks of
 poker hands and comparing them to determine a winner
+
+regex.c is a basic regex library which supports * ? .
+and (), does not support regex characters within ()
+Compile with "gcc regex.c -o reg" 
+To use ./reg (regex phrase) (string input)
