@@ -1,5 +1,5 @@
 {
-  "name": "websockets",
+  "name": "websocketchatapp",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.19.2",
     "socket.io": "^4.7.5"
   },
   "devDependencies": {
