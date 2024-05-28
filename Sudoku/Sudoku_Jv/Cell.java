@@ -10,7 +10,6 @@ public class Cell implements Comparable<Cell> {
         this.ID = ID;
         this.priority = 0;
         this.isFixed = false;
-        this.inPlay = false;
         this.invalidNums = new int[9];
     }
 
@@ -42,14 +41,6 @@ public class Cell implements Comparable<Cell> {
 
     public boolean isFixed() {
         return isFixed;
-    }
-
-    public void changeStatus(boolean stat) {
-        this.inPlay = stat;
-    }
-
-    public boolean isInPlay() {
-        return inPlay;
     }
 
     public int getID() {

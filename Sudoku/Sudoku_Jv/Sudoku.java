@@ -98,8 +98,6 @@ public class Sudoku {
     public void placeVal(int val, int row, int col) {
         grid[row][col] = val;
         if (val != 0) {
-            int ID = row * 9 + col;
-            list[ID].changeStatus(true);
             addInvalids(val, row, col);
         }
     }
@@ -111,8 +109,6 @@ public class Sudoku {
     public void removeVal(int val, int row, int col) {
         grid[row][col] = 0;
         if (val != 0) {
-            int ID = row * 9 + col;
-            list[ID].changeStatus(false);
             removeInvalids(val, row, col);
         }
     }
@@ -124,7 +120,7 @@ public class Sudoku {
     private void addInvalids(int val, int row, int col) {
         for (Cell cell : list) {
             // checks if the Cell is fixed or is inPlay, if so, skip over
-            if (!cell.isFixed()) { // || !cell.isInPlay()) {
+            if (!cell.isFixed()) {
                 int cellRow = cell.getID() / 9;
                 int cellCol = cell.getID() % 9;
                 // checks if the Cell is affected by the added val
@@ -143,12 +139,13 @@ public class Sudoku {
      */
     private void removeInvalids(int val, int row, int col) {
         for (Cell cell : list) {
-            if (!cell.isFixed()) { // || !cell.isInPlay()) {
+            if (!cell.isFixed()) {
                 int cellRow = cell.getID() / 9;
                 int cellCol = cell.getID() % 9;
                 if ((row == cellRow) || (col == cellCol) ||
                         (row / 3 == cellRow / 3 && col / 3 == cellCol / 3)) {
                     cell.removeInvalid(val);
+                    System.out.println("Undo " + cell + " " + val);
                 }
             }
         }
@@ -164,7 +161,7 @@ public class Sudoku {
         int count = 0;
         // count finds the amount of cells that have priority less than 9
         for (Cell cell : list) {
-            if (cell.getPriority() < 9 && !cell.isFixed() && !cell.isInPlay()) {
+            if (cell.getPriority() < 9 && !cell.isFixed()) { // && !cell.isInPlay()) {
                 count++;
             }
         }
@@ -173,7 +170,7 @@ public class Sudoku {
         count = 0;
         // reiterates through the list again to apply the cells to new list
         for (Cell cell : list) {
-            if (cell.getPriority() < 9 && !cell.isFixed() && !cell.isInPlay()) {
+            if (cell.getPriority() < 9 && !cell.isFixed()) { // && !cell.isInPlay()) {
                 newList[count] = cell;
                 count++;
             }
@@ -181,6 +178,17 @@ public class Sudoku {
         // assigns sortedList to newList and sorts it
         sortedList = newList;
         mergeSort(sortedList);
+        if (COUNT != 0) {
+            printCellArray();
+        }
+    }
+
+    private void printCellArray() {
+        int i = 0;
+        while (sortedList.length > 0 && i < sortedList.length) {
+            System.out.println(sortedList[i] + " ");
+            i++;
+        }
     }
 
     int COUNT = 0;
@@ -273,6 +281,17 @@ public class Sudoku {
                 { 0, 0, 5, 3, 0, 0, 0, 0, 0 },
                 { 0, 0, 6, 0, 0, 1, 9, 4, 0 },
                 { 0, 0, 1, 2, 0, 0, 0, 6, 0 },
+        };
+        int[][] input1 = {
+                { 4, 3, 5, 2, 6, 9, 7, 8, 1 },
+                { 6, 8, 2, 5, 7, 1, 4, 9, 3 },
+                { 1, 9, 7, 8, 3, 4, 5, 6, 2 },
+                { 8, 2, 6, 1, 9, 5, 3, 4, 7 },
+                { 3, 7, 4, 6, 8, 2, 9, 1, 5 },
+                { 9, 5, 1, 7, 4, 0, 0, 0, 0 },
+                { 5, 1, 9, 3, 2, 0, 0, 0, 0 },
+                { 2, 4, 8, 9, 5, 0, 0, 0, 0 },
+                { 7, 6, 3, 4, 1, 0, 0, 0, 0 },
         };
         puzzle.readInput(input);
 
