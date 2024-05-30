@@ -1,6 +1,7 @@
 import booking.constants as const
 import os
 import time
+from datetime import date
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
@@ -56,5 +57,52 @@ class Booking(webdriver.Chrome):
         # clicks first autocomplete result
         confirm_destination_element = self.find_element(By.ID, "autocomplete-result-0")
         confirm_destination_element.click()
+
+    # helper function to parse a string date into a date object
+    def __parse_date(self, str_date):
+        temp = str_date.split("-")
+        year = int(temp[0])
+        month = int(temp[1])
+        day = int(temp[2])
+        parsed_date = date(year, month, day)
+        return parsed_date
+
+    # helper function to properly return the number of next_button presses
+    def __date_count(self, startDate, endDate):
+        count = 0
+        count += 12 * (endDate.year - startDate.year)
+        count += endDate.month - startDate.month
+        return count - 1
+
+    # change and select checking and checkout dates
+    def change_dates(self, checkin, checkout):
+        # find the next month button
+        next_button = self.find_element(By.CSS_SELECTOR, '[aria-label="Next month"]')
+
+        # find the number of clicks to reach the checkin date
+        count = self.__date_count(date.today(), self.__parse_date(checkin))
+        while count > 0:
+            next_button.click()
+            count -= 1
+
+        # find and select check-in date element
+        checkin_element = self.find_element(
+            By.XPATH, f"//td[./span[@data-date='{checkin}']]"
+        )
+        checkin_element.click()
+
+        # find the number of clicks to reach the checkout date
+        count = self.__date_count(
+            self.__parse_date(checkin), self.__parse_date(checkout)
+        )
+        while count > 0:
+            next_button.click()
+            count -= 1
+
+        # find and select check-out date element
+        checkout_element = self.find_element(
+            By.XPATH, f"//td[./span[@data-date='{checkout}']]"
+        )
+        checkout_element.click()
 
         time.sleep(10)
