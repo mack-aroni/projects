@@ -12,6 +12,8 @@ class Booking(webdriver.Chrome):
         self.driver_path = driver_path
         self.teardown = teardown
         os.environ["PATH"] += self.driver_path
+        options = webdriver.ChromeOptions()
+        options.add_experimental_option("includeSwitches", ["enable-logging"])
         super(Booking, self).__init__()
         self.implicitly_wait(15)
         # self.maximize_window()
@@ -28,17 +30,17 @@ class Booking(webdriver.Chrome):
         # closes signin popup if necessary
         try:
             button = self.find_element(
-                By.CSS_SELECTOR, '[aria-label="Dismiss sign-in info."]'
+                By.CSS_SELECTOR, "[aria-label='Dismiss sign-in info.']"
             )
             button.click()
         except:
-            print("No Dismiss Sign In Button")
+            print("No Dismiss Sign-In Button")
 
-    # changes currency
-    def change_currency(self, currency):
+    # selects currency
+    def select_currency(self, currency):
         # find and click currency selector button
         currency_selector = self.find_element(
-            By.CSS_SELECTOR, '[aria-label="Prices in U.S. Dollar"]'
+            By.CSS_SELECTOR, "[aria-label='Prices in U.S. Dollar']"
         )
         currency_selector.click()
         # find and click selected currency
@@ -48,8 +50,8 @@ class Booking(webdriver.Chrome):
         )
         selected_currency_element.click()
 
-    # change intended destination
-    def change_destination(self, destination):
+    # selects intended destination
+    def select_destination(self, destination):
         # inputs destination
         destination_field = self.find_element(By.ID, ":re:")
         destination_field.clear()
@@ -74,10 +76,10 @@ class Booking(webdriver.Chrome):
         count += endDate.month - startDate.month
         return count - 1
 
-    # change and select checking and checkout dates
-    def change_dates(self, checkin, checkout):
+    # selects check-in and check-out dates
+    def select_dates(self, checkin, checkout):
         # find the next month button
-        next_button = self.find_element(By.CSS_SELECTOR, '[aria-label="Next month"]')
+        next_button = self.find_element(By.CSS_SELECTOR, "[aria-label='Next month']")
 
         # find the number of clicks to reach the checkin date
         count = self.__date_count(date.today(), self.__parse_date(checkin))
@@ -91,7 +93,7 @@ class Booking(webdriver.Chrome):
         )
         checkin_element.click()
 
-        # find the number of clicks to reach the checkout date
+        # determine the number of clicks to reach the checkout date
         count = self.__date_count(
             self.__parse_date(checkin), self.__parse_date(checkout)
         )
@@ -105,4 +107,58 @@ class Booking(webdriver.Chrome):
         )
         checkout_element.click()
 
-        time.sleep(10)
+    # selects the number of adults and rooms desired
+    def select_adults_rooms(self, adults, rooms):
+        # selects person and room element
+        selector_element = self.find_element(
+            By.CSS_SELECTOR, "[data-testid='occupancy-config']"
+        )
+        selector_element.click()
+
+        # find increment buttons (0-2)
+        increment_buttons = self.find_elements(By.CLASS_NAME, "f4d78af12a")
+
+        # increments adults to desired amount
+        adults_field = self.find_element(By.ID, "group_adults")
+        while int(adults_field.get_attribute("value")) < adults:
+            increment_buttons[0].click()
+
+        # increments rooms to desired amount
+        rooms_field = self.find_element(By.ID, "no_rooms")
+        while int(rooms_field.get_attribute("value")) < rooms:
+            increment_buttons[2].click()
+
+    # selects the number of children and their ages
+    def select_children(self, children, ages):
+        # find increment buttons (0-2)
+        increment_buttons = self.find_elements(By.CLASS_NAME, "f4d78af12a")
+
+        # increments children to desired amount
+        children_field = self.find_element(By.ID, "group_children")
+        while int(children_field.get_attribute("value")) < children:
+            increment_buttons[1].click()
+
+        # inputs ages for each child
+        age_elements = self.find_elements(By.CSS_SELECTOR, "[name='age']")
+        for i in range(len(age_elements)):
+            age_elements[i].click()
+            age_element = age_elements[i].find_element(
+                By.CSS_SELECTOR, f"[value='{ages[i]}']"
+            )
+            age_element.click()
+
+    # click search button and wait for subsequent page to load
+    def search(self):
+        search_button = self.find_element(By.CSS_SELECTOR, "[type='submit']")
+        search_button.click()
+        time.sleep(1)
+
+    # applies
+    def apply_filters(self):
+        rating_div = self.find_element(
+            By.CSS_SELECTOR, "[data-testid='filters-sidebar']"
+        )
+        rating_elements = rating_div.find_elements(By.CSS_SELECTOR, "[data-testid]")
+        print(len(rating_elements))
+
+        time.sleep(5)
