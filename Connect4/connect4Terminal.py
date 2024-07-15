@@ -9,10 +9,27 @@ class Connect4_Game:
 
     # creates board using a 2d array of 0s
     def __init__(self, rows, cols):
+        self.rows = rows
+        self.cols = cols
         self.board = [[0] * cols for _ in range(rows)]
 
+    # helper function to check if a move is valid
+    def __valid_move(self, col):
+        # check that input is an int
+        try:
+            col = int(col)
+        except:
+            return False
+
+        # checks that top row of the column is not filled
+        # and within the boundaries of the grid
+        if self.board[5][col] != 0 and 0 <= col <= self.cols:
+            print("Invalid Move")
+            return False
+        return True
+
     # drops a piece by player on col
-    def drop_piece(self, col, player):
+    def __drop_piece(self, col, player):
         # find next empty space in col
         r = 0
         while self.board[r][col] != 0:
@@ -20,10 +37,10 @@ class Connect4_Game:
         self.board[r][col] = player
 
         # check if new piece creates a win
-        return self.win_condition(self.board, r, col, player)
+        return self.__win_condition(r, col, player)
 
     # formats and prints the board
-    def print_board(self):
+    def __print_board(self):
         for r in reversed(range(len(self.board))):
             s = "| "
             for c in range(len(self.board[0])):
@@ -49,7 +66,7 @@ class Connect4_Game:
         return count
 
     # function to check for a win after a new piece is placed
-    def win_condition(self, row, col, player):
+    def __win_condition(self, row, col, player):
         # check all directions
         directions = [(0, 1), (1, 0), (1, 1), (1, -1)]
         for dr, dc in directions:
@@ -60,51 +77,40 @@ class Connect4_Game:
                 return True
         return False
 
-    # helper function to check if a move is valid
-    def __valid_move(self, col):
-        # checks that top row of the column is not filled
-        if self.board[5][col] != 0:
-            print("Invalid Move")
-            return False
-        return True
-
     # main runloop
     def run(self):
         game_over = False
         player_turn = 0
 
         while not game_over:
-            self.print_board()
+            self.__print_board()
 
             # player 1 input
             if player_turn == 0:
                 # takes column input
-                selection = int(input("Player 1 Move (0,6): "))
+                selection = input("Player 1 Move (0-6): ")
 
                 # check for valid move and take input until valid
-                if not self.__valid_move(selection):
-                    selection = int(input("Player 1 Move (0,6): "))
+                while not self.__valid_move(selection):
+                    print("invalid")
+                    selection = input("Player 1 Move (0-6): ")
 
-                try:
-                    if self.drop_piece(selection, 1):
-                        game_over = True
-                        print("Player 1 Wins")
-                except:
-                    print("Error")
+                selection = int(selection)
+                if self.__drop_piece(selection, 1):
+                    game_over = True
+                    print("Player 1 Wins")
 
             # player 2 input
             else:
-                selection = int(input("Player 2 Move (0,6): "))
+                selection = input("Player 2 Move (0-6): ")
 
-                if not self.__valid_move(selection):
-                    selection = int(input("Player 1 Move (0,6): "))
+                while not self.__valid_move(selection):
+                    selection = input("Player 2 Move (0-6): ")
 
-                try:
-                    if self.drop_piece(selection, 2):
-                        game_over = True
-                        print("Player 2 Wins")
-                except:
-                    print("Error")
+                selection = int(selection)
+                if self.__drop_piece(selection, 2):
+                    game_over = True
+                    print("Player 2 Wins")
 
             # alternate between players
             player_turn = (player_turn + 1) % 2
