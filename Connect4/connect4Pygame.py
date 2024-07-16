@@ -1,3 +1,9 @@
+"""
+Connect4_Game:
+class that creates a Connect4 game that runs
+and takes inputs through a PyGame UI
+"""
+
 import pygame
 import sys
 import math
