@@ -8,13 +8,31 @@ RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 
 
-# helper function to check if a move is valid
-def valid_move(col):
-    # checks that top row of the column is not filled
-    # and within the boundaries of the grid
-    if BOARD[5][col] != 0 and 0 <= col <= COL_COUNT:
-        return False
-    return True
+# draw blue square with black holes
+# to represent the connect4 frame
+def draw_board():
+    pygame.draw.rect(
+        SCREEN,
+        BLUE,
+        (
+            0,
+            TILE_SIZE,
+            width,
+            height,
+        ),
+    )
+    for c in range(COL_COUNT):
+        for r in range(ROW_COUNT):
+            pygame.draw.circle(
+                SCREEN,
+                BLACK,
+                (
+                    int(c * TILE_SIZE + TILE_SIZE / 2),
+                    int(r * TILE_SIZE + TILE_SIZE + TILE_SIZE / 2),
+                ),
+                RADIUS,
+            )
+    pygame.display.update()
 
 
 # drops a piece by player on col
@@ -24,29 +42,18 @@ def drop_piece(col, player):
     while BOARD[r][col] != 0:
         r += 1
 
-    BOARD[r][col] = player
+    BOARD[r][col] = 1 if player == RED else 2
 
     # change appropriate circle color
-    if player_turn == 0:
-        pygame.draw.circle(
-            SCREEN,
-            RED,
-            (
-                int(col * TILE_SIZE + TILE_SIZE / 2),
-                height - int(r * TILE_SIZE + TILE_SIZE / 2),
-            ),
-            RADIUS,
-        )
-    else:
-        pygame.draw.circle(
-            SCREEN,
-            YELLOW,
-            (
-                int(col * TILE_SIZE + TILE_SIZE / 2),
-                height - int(r * TILE_SIZE + TILE_SIZE / 2),
-            ),
-            RADIUS,
-        )
+    pygame.draw.circle(
+        SCREEN,
+        player,
+        (
+            int(col * TILE_SIZE + TILE_SIZE / 2),
+            height - int(r * TILE_SIZE + TILE_SIZE / 2),
+        ),
+        RADIUS,
+    )
     pygame.display.update()
 
     # check if new piece creates a win
@@ -57,9 +64,10 @@ def drop_piece(col, player):
 # (dr dc inputs being the changes in x and y)
 def count_direction(row, col, dr, dc, player):
     count = 0
+    num = 1 if player == RED else 2
     r, c = row + dr, col + dc
     # iterate over that direction until an edge or non player tile is reached
-    while 0 <= r < len(BOARD) and 0 <= c < len(BOARD[0]) and BOARD[r][c] == player:
+    while 0 <= r < len(BOARD) and 0 <= c < len(BOARD[0]) and BOARD[r][c] == num:
         count += 1
         r += dr
         c += dc
@@ -80,21 +88,14 @@ def win_condition(row, col, player):
 
 
 #  updates the moving piece color
-def update_piece(player):
+def update_piece(player, posx):
     pygame.draw.rect(SCREEN, BLACK, (0, 0, width, TILE_SIZE))
-    posx = event.pos[0]
 
     # make sure no overflow
-    if posx < RADIUS:
-        posx = RADIUS
-    elif posx > width - RADIUS:
-        posx = width - RADIUS
+    posx = max(RADIUS, min(posx, width - RADIUS))
 
     # make sure circle is of correct color
-    if player == 0:
-        pygame.draw.circle(SCREEN, RED, (posx, int(TILE_SIZE / 2)), RADIUS)
-    else:
-        pygame.draw.circle(SCREEN, YELLOW, (posx, int(TILE_SIZE / 2)), RADIUS)
+    pygame.draw.circle(SCREEN, player, (posx, int(TILE_SIZE / 2)), RADIUS)
     pygame.display.update()
 
 
@@ -113,71 +114,55 @@ SCREEN = pygame.display.set_mode(size)
 RADIUS = int(TILE_SIZE / 2 - 5)
 FONT = pygame.font.SysFont("monospace", 50)
 
-# draw blue square with black holes
-# to represent the connect 4 frame
-pygame.draw.rect(
-    SCREEN,
-    BLUE,
-    (
-        0,
-        TILE_SIZE,
-        width,
-        height,
-    ),
-)
-for c in range(COL_COUNT):
-    for r in range(ROW_COUNT):
-        pygame.draw.circle(
-            SCREEN,
-            BLACK,
-            (
-                int(c * TILE_SIZE + TILE_SIZE / 2),
-                int(r * TILE_SIZE + TILE_SIZE + TILE_SIZE / 2),
-            ),
-            RADIUS,
-        )
-pygame.display.update()
-
-game_over = False
-player_turn = 0
 
 # main runloop
-while not game_over:
+def run():
+    draw_board()
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
+    game_over = False
+    player_turn = RED
 
-        # moving circle that follows mouse
-        if event.type == pygame.MOUSEMOTION:
-            update_piece(player_turn)
+    while not game_over:
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            posx = event.pos[0]
-            selection = math.floor(posx / TILE_SIZE)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
 
-            # check valid move
-            if valid_move(selection):
+            # moving circle that follows mouse
+            if event.type == pygame.MOUSEMOTION:
+                update_piece(player_turn, event.pos[0])
 
-                # player 1 input
-                if player_turn == 0:
-                    # check winning move
-                    if drop_piece(selection, 1):
-                        label = FONT.render("Player 1 Wins!", 1, RED)
-                        SCREEN.blit(label, (TILE_SIZE, 10))
-                        pygame.display.update()
-                        game_over = True
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                posx = event.pos[0]
+                selection = math.floor(posx / TILE_SIZE)
 
-                # player 2 input
-                else:
-                    if drop_piece(selection, 2):
-                        label = FONT.render("Player 2 Wins!", 1, YELLOW)
-                        SCREEN.blit(label, (TILE_SIZE, 10))
-                        pygame.display.update()
-                        game_over = True
+                # checks that top row of the column is not filled
+                if BOARD[5][selection] == 0:
 
-                # alternate between players
-                player_turn = (player_turn + 1) % 2
-                update_piece(player_turn)
+                    # player 1 input
+                    if player_turn == RED:
+                        # check winning move
+                        if drop_piece(selection, player_turn):
+                            label = FONT.render("Player 1 Wins!", 1, RED)
+                            SCREEN.blit(label, (TILE_SIZE, 10))
+                            pygame.display.update()
+                            game_over = True
 
-pygame.time.wait(2000)
+                    # player 2 input
+                    else:
+                        if drop_piece(selection, player_turn):
+                            label = FONT.render("Player 2 Wins!", 1, YELLOW)
+                            SCREEN.blit(label, (TILE_SIZE, 10))
+                            pygame.display.update()
+                            game_over = True
+
+                    # alternate between players
+                    player_turn = YELLOW if player_turn == RED else RED
+                    # print(player_turn)
+                    update_piece(player_turn, posx)
+
+    pygame.time.wait(2000)
+
+
+if __name__ == "__main__":
+    run()
