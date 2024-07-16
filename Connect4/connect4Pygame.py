@@ -1,17 +1,31 @@
 """
 Connect4_Game:
 class that creates a Connect4 game that runs
-and takes inputs through a PyGame UI
+and takes inputs through a PyGame GUI
 """
 
 import pygame
 import sys
 import math
 
+# constants/pygame init
 BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
+
+ROW_COUNT = 6
+COL_COUNT = 7
+TILE_SIZE = 80
+RADIUS = int(TILE_SIZE / 2 - 5)
+BOARD = [[0] * COL_COUNT for _ in range(ROW_COUNT)]
+
+pygame.init()
+
+WIDTH = COL_COUNT * TILE_SIZE
+HEIGHT = (ROW_COUNT + 1) * TILE_SIZE
+SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
+FONT = pygame.font.SysFont("monospace", 50)
 
 
 # draw blue square with black holes
@@ -23,8 +37,8 @@ def draw_board():
         (
             0,
             TILE_SIZE,
-            width,
-            height,
+            WIDTH,
+            HEIGHT,
         ),
     )
     for c in range(COL_COUNT):
@@ -56,7 +70,7 @@ def drop_piece(col, player):
         player,
         (
             int(col * TILE_SIZE + TILE_SIZE / 2),
-            height - int(r * TILE_SIZE + TILE_SIZE / 2),
+            HEIGHT - int(r * TILE_SIZE + TILE_SIZE / 2),
         ),
         RADIUS,
     )
@@ -95,30 +109,14 @@ def win_condition(row, col, player):
 
 #  updates the moving piece color
 def update_piece(player, posx):
-    pygame.draw.rect(SCREEN, BLACK, (0, 0, width, TILE_SIZE))
+    pygame.draw.rect(SCREEN, BLACK, (0, 0, WIDTH, TILE_SIZE))
 
     # make sure no overflow
-    posx = max(RADIUS, min(posx, width - RADIUS))
+    posx = max(RADIUS, min(posx, WIDTH - RADIUS))
 
     # make sure circle is of correct color
     pygame.draw.circle(SCREEN, player, (posx, int(TILE_SIZE / 2)), RADIUS)
     pygame.display.update()
-
-
-# execution start
-pygame.init()
-
-ROW_COUNT = 6
-COL_COUNT = 7
-TILE_SIZE = 80
-BOARD = [[0] * COL_COUNT for _ in range(ROW_COUNT)]
-
-width = COL_COUNT * TILE_SIZE
-height = (ROW_COUNT + 1) * TILE_SIZE
-size = (width, height)
-SCREEN = pygame.display.set_mode(size)
-RADIUS = int(TILE_SIZE / 2 - 5)
-FONT = pygame.font.SysFont("monospace", 50)
 
 
 # main runloop
@@ -164,8 +162,9 @@ def run():
 
                     # alternate between players
                     player_turn = YELLOW if player_turn == RED else RED
-                    # print(player_turn)
-                    update_piece(player_turn, posx)
+
+                    if not game_over:
+                        update_piece(player_turn, posx)
 
     pygame.time.wait(2000)
 
