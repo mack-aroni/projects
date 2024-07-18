@@ -13,6 +13,13 @@ class Connect4_Game:
         self.cols = cols
         self.board = [[0] * cols for _ in range(rows)]
 
+    # helper function to check if board is filled (tie)
+    def __board_filled(self):
+        for i in range(self.rows):
+            if self.board[i][5] == 0:
+                return False
+        return True
+
     # helper function to check if a move is valid
     def __valid_move(self, col):
         # check that input is an int
@@ -96,9 +103,14 @@ class Connect4_Game:
                     selection = input("Player 1 Move (0-6): ")
 
                 selection = int(selection)
+                # drop piece and check for win
                 if self.__drop_piece(selection, 1):
                     game_over = True
                     print("Player 1 Wins")
+                # tie case
+                if self.__board_filled():
+                    game_over = True
+                    print("Tie")
 
             # player 2 input
             else:
@@ -111,6 +123,9 @@ class Connect4_Game:
                 if self.__drop_piece(selection, 2):
                     game_over = True
                     print("Player 2 Wins")
+                if self.__board_filled():
+                    game_over = True
+                    print("Tie")
 
             # alternate between players
             player_turn = (player_turn + 1) % 2
