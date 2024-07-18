@@ -1,12 +1,16 @@
 """
 Connect4_Game:
 class that creates a Connect4 game that runs
-and takes inputs through a PyGame GUI
+and takes inputs through a PyGame GUI and contains a
+minimax algorithm AI player
 """
 
 import pygame
 import sys
 import math
+import random
+
+
 import numpy as np
 
 # constants/pygame init
@@ -130,7 +134,7 @@ def available_moves(board):
     moves = []
     for c in range(COL_COUNT):
         r = 0
-        while board[r][c] != 0:
+        while r < ROW_COUNT and board[r][c] != 0:
             r += 1
         if r < ROW_COUNT:
             moves.append((r, c))
@@ -155,10 +159,9 @@ def eval_moves(board, moves, player):
             temp.append(count)
 
         if temp:
-            # print(m, str(max(temp)))
             rank_moves.append((m, max(temp)))
 
-    print(rank_moves)
+    # print(rank_moves)
     return rank_moves
 
 
@@ -173,6 +176,53 @@ def best_move(board, moves):
             max = i
 
     return moves[max][0]
+
+
+# main call function for AI minimax algorithm
+def minimax(board, depth, alpha, beta, maximizingPlayer):
+    valid_locations = available_moves(board)
+    print(valid_locations)
+
+    # end of depth returns best possible move
+    if depth == 0:
+        sort = eval_moves(board, valid_locations, YELLOW)
+        print("sort", sort)
+        return (None, sort[0][1])
+
+    # no more valid moves
+    if len(valid_locations) == 0:
+        return (None, 0)
+
+    # maximizing player score
+    if maximizingPlayer:
+        value = -math.inf
+        column = random.choice(valid_locations)
+        for m in valid_locations:
+            b_copy = [row[:] for row in board]
+            if drop_piece(b_copy, m[1], YELLOW):
+                return (None, 1000)
+            new_score = minimax(b_copy, depth - 1, alpha, beta, False)[1]
+            if new_score > value:
+                value = new_score
+                column = m[1]
+            if max(alpha, value) >= beta:
+                break
+        return column, value
+    # minimizing opponent score
+    else:
+        value = math.inf
+        column = random.choice(valid_locations)
+        for m in valid_locations:
+            b_copy = [row[:] for row in board]
+            if drop_piece(b_copy, m[1], RED):
+                return (None, -1000)
+            new_score = minimax(b_copy, depth - 1, alpha, beta, True)[1]
+            if new_score < value:
+                value = new_score
+                column = m[1]
+            if alpha >= max(beta, value):
+                break
+        return column, value
 
 
 # main runloop
@@ -210,29 +260,26 @@ def run():
                             SCREEN.blit(label, (TILE_SIZE, 10))
                             pygame.display.update()
 
+                    # change turns
                     player_turn = YELLOW
 
-        # AI input
+        # AI turn
         if player_turn == YELLOW and not game_over:
-            moves = available_moves(board)
-            moves = eval_moves(board, moves, player_turn)
-            move = best_move(board, moves)
+            # moves = available_moves(board)
+            # moves = eval_moves(board, moves, player_turn)
+            # move = best_move(board, moves)
+            col, score = minimax(board, 3, -math.inf, math.inf, True)
+            print("col", col, "score", score)
 
-            game_over = drop_piece(board, move[1], player_turn)
+            game_over = drop_piece(board, col, player_turn)
             update_screen(board)
             if game_over:
                 label = FONT.render("Player 2 Wins!", 1, YELLOW)
                 SCREEN.blit(label, (TILE_SIZE, 10))
                 pygame.display.update()
 
-            # alternate between players
+            # change turns
             player_turn = RED
-
-        if not game_over:
-            print(np.array(board))
-            # moves = available_moves(board)
-            # moves = eval_moves(board, moves, player_turn)
-            # print(best_move(board, moves))
 
     pygame.time.wait(2000)
 
