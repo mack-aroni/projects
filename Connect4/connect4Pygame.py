@@ -107,6 +107,14 @@ def win_condition(row, col, player):
     return False
 
 
+# helper function to check if board is filled (tie)
+def board_filled():
+    for i in range(ROW_COUNT):
+        if BOARD[i][5] == 0:
+            return False
+    return True
+
+
 #  updates the moving piece color
 def update_piece(player, posx):
     pygame.draw.rect(SCREEN, BLACK, (0, 0, WIDTH, TILE_SIZE))
@@ -151,11 +159,22 @@ def run():
                             SCREEN.blit(label, (TILE_SIZE, 10))
                             pygame.display.update()
                             game_over = True
+                        # tie case
+                        if board_filled():
+                            label = FONT.render("TIE", 1, (255, 255, 255))
+                            SCREEN.blit(label, (TILE_SIZE, 10))
+                            pygame.display.update()
+                            game_over = True
 
                     # player 2 input
                     else:
                         if drop_piece(selection, player_turn):
                             label = FONT.render("Player 2 Wins!", 1, YELLOW)
+                            SCREEN.blit(label, (TILE_SIZE, 10))
+                            pygame.display.update()
+                            game_over = True
+                        if board_filled():
+                            label = FONT.render("TIE", 1, (255, 255, 255))
                             SCREEN.blit(label, (TILE_SIZE, 10))
                             pygame.display.update()
                             game_over = True
