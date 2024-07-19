@@ -1,0 +1,10 @@
+Connect4 is a collection of Connect4 recreations in Python
+
+connect4Terminal is a Terminal implementation using OOP to
+function as a script
+
+connect4Pygame is a Pygame implementation that is reformatted
+to better work with Pygame
+
+connect4AI is a fork of connect4Pygame where instead of a second player
+the user plays against primitive minimax AI (not completed)
