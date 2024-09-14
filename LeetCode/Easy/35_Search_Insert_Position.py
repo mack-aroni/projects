@@ -15,23 +15,26 @@ using pointers
 2. change pointers by the halves until either
 target is found or there are no numbers left
 """
+
+
 def searchInsert(nums, target):
     f = 0
-    b = len(nums)-1
+    b = len(nums) - 1
     while f <= b:
-        m = (b+f) // 2
+        m = (b + f) // 2
         if nums[m] == target:
             return m
-        #target is in front of m
+        # target is in front of m
         if nums[m] < target:
             f = m + 1
         else:
             b = m - 1
     return f
 
+
 if __name__ == "__main__":
-    nums = [1,3,5,6]
+    nums = [1, 3, 5, 6]
     target = 5
-    print(searchInsert(nums,target))
+    print(searchInsert(nums, target))
     target2 = 2
-    print(searchInsert(nums,target2))
+    print(searchInsert(nums, target2))

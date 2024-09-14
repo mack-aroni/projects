@@ -16,16 +16,19 @@ brute force
 2. if duplicate, pop from nums and resume at i
 3. else increase count and i
 """
+
+
 def removeDuplicates(nums):
     count = 1
     i = 0
-    while (i < len(nums)-1):
-        if nums[i] == nums[i+1]:
+    while i < len(nums) - 1:
+        if nums[i] == nums[i + 1]:
             nums.pop(i)
         else:
             count = count + 1
             i = i + 1
     return count
+
 
 """
 second solution:
@@ -37,6 +40,8 @@ replace in place
 the duplicate
 4. return j which is unique count
 """
+
+
 def removeDuplicates_2(nums):
     j = 1
     for i in range(1, len(nums)):
@@ -45,6 +50,7 @@ def removeDuplicates_2(nums):
             j += 1
     return j
 
+
 if __name__ == "__main__":
-    nums = [0,0,1,1,1,2,2,3,3,3]
+    nums = [0, 0, 1, 1, 1, 2, 2, 3, 3, 3]
     print(removeDuplicates(nums))

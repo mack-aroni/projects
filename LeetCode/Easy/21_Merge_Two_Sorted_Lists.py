@@ -8,11 +8,13 @@ splicing together the nodes of the first two lists.
 Return the head of the merged linked list.
 """
 
+
 class ListNode(object):
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
-        
+
+
 def LList(list):
     temp = cur = ListNode()
     for i in list:
@@ -20,6 +22,7 @@ def LList(list):
         cur = cur.next
     head = temp.next
     return head
+
 
 """
 first solution:
@@ -30,34 +33,37 @@ iterate over both LLists
 3. at the end of while, attach the 
 rest of the remaining list to list3
 """
+
+
 def mergeTwoLists(list1, list2):
-    #create list and dummy head
+    # create list and dummy head
     list3 = head = ListNode()
-    #iterate over both lists until one is empty
+    # iterate over both lists until one is empty
     while list1 and list2:
         if list1.val < list2.val:
-            #set list3.next
+            # set list3.next
             list3.next = list1
-            #iterate to list3.next
+            # iterate to list3.next
             list3 = list3.next
-            #iterate list1 to list1.next
+            # iterate list1 to list1.next
             list1 = list1.next
         else:
             list3.next = list2
             list3 = list3.next
             list2 = list2.next
-    #if there is remaining nodes, attach to list3
+    # if there is remaining nodes, attach to list3
     if list1 or list2:
         list3.next = list1 if list1 else list2
     return head.next
-    
+
+
 if __name__ == "__main__":
-    list1 = LList([1,2,3,5,6])
-    list2 = LList([1,3,4])
-    list3 = mergeTwoLists(list1,list2)
+    list1 = LList([1, 2, 3, 5, 6])
+    list2 = LList([1, 3, 4])
+    list3 = mergeTwoLists(list1, list2)
     cur = list3
     s = ""
     while cur:
-        s  = s + str(cur.val)
+        s = s + str(cur.val)
         cur = cur.next
     print(s)

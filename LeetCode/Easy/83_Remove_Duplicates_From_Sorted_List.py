@@ -5,10 +5,12 @@ all duplicates such that each element appears only
 once. Return the linked list sorted as well.
 """
 
+
 class ListNode(object):
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
+
 
 def LList(list):
     temp = cur = ListNode()
@@ -17,6 +19,7 @@ def LList(list):
         cur = cur.next
     head = temp.next
     return head
+
 
 """
 first solution:
@@ -29,6 +32,8 @@ pointer jumping
 make cur temp.next and reassign value and temp
 5. at the end, if temp != cur node, cut off the list
 """
+
+
 def deleteDuplicates(head):
     if not head:
         return None
@@ -45,6 +50,7 @@ def deleteDuplicates(head):
         temp.next = None
     return head
 
+
 """
 second solution:
 (24ms/62.90%)(13.28MB/84.99%)
@@ -54,30 +60,33 @@ iterative
 skip over the next index, continue until if statement 
 is false
 """
+
+
 def deleteDuplicates_2(head):
     temp = head
-    while (temp and temp.next):
-        if (temp.next.val == temp.val):
+    while temp and temp.next:
+        if temp.next.val == temp.val:
             temp.next = temp.next.next
-            continue # continue works until if statement is false
+            continue  # continue works until if statement is false
         temp = temp.next
     return head
 
+
 if __name__ == "__main__":
-    list = LList([1,1,2,3,3])
+    list = LList([1, 1, 2, 3, 3])
     head = deleteDuplicates(list)
     cur = head
     s = ""
     while cur:
-        s  = s + str(cur.val)
+        s = s + str(cur.val)
         cur = cur.next
     print(s)
-    
-    list2 = LList([1,1])
+
+    list2 = LList([1, 1])
     head2 = deleteDuplicates(list2)
     cur = head2
     s = ""
     while cur:
-        s  = s + str(cur.val)
+        s = s + str(cur.val)
         cur = cur.next
     print(s)

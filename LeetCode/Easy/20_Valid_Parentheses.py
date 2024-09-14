@@ -20,26 +20,28 @@ using a stack
 pop from stack, otherwise return False
 4. at the end return if the stack is empty
 """
+
+
 def isValid(s):
     if len(s) == 1:
         return False
     stack = []
     for i in range(len(s)):
-        #cases for forward brackets
+        # cases for forward brackets
         if s[i] == "(":
             stack.append(")")
         elif s[i] == "[":
             stack.append("]")
         elif s[i] == "{":
             stack.append("}")
-        #cases for reverse
+        # cases for reverse
         elif s[i] == ")" or s[i] == "]" or s[i] == "}":
-            #no accompanying forward bracket
+            # no accompanying forward bracket
             if len(stack) == 0:
                 return False
             if stack[-1] == s[i]:
                 stack.pop()
-            #no accompanying forward bracket
+            # no accompanying forward bracket
             else:
                 return False
     return len(stack) == 0

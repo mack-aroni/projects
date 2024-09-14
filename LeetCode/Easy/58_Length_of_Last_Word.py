@@ -15,6 +15,8 @@ reverse counting
 2. ignore end space, count chars, break
 after next space
 """
+
+
 def lengthOfLastWord(s):
     count = 0
     for i in reversed(range(len(s))):
@@ -23,6 +25,7 @@ def lengthOfLastWord(s):
         elif count != 0:
             break
     return count
+
 
 """
 second solution:
@@ -38,14 +41,17 @@ last substring is the entire string, so return len
 the length of the last substring from the last space index
 to the end of the trimmed string
 """
+
+
 def lengthOfLastWord_2(self, s):
     s = s.strip()
-    last_space_index = s.rfind(' ')
+    last_space_index = s.rfind(" ")
 
     if last_space_index == -1:
         return len(s)
 
     return len(s) - last_space_index - 1
+
 
 if __name__ == "__main__":
     s = "Hello World"

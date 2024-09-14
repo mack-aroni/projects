@@ -12,10 +12,13 @@ connected to. Note that pos is not passed as a parameter.
 Return true if there is a cycle in the linked list.
 Otherwise, return false.
 """
+
+
 class ListNode(object):
     def __init__(self, x):
         self.val = x
         self.next = None
+
 
 """
 first solution:
@@ -26,6 +29,8 @@ and another that increments by two
 2. if there is a cycle, eventually the two
 pointers will overlap
 """
+
+
 def hasCycle(head):
     if not head.next:
         return False
@@ -37,6 +42,8 @@ def hasCycle(head):
         if f == l:
             return True
     return False
+
+
 if __name__ == "__main__":
     node1 = ListNode(1)
     node2 = ListNode(2)

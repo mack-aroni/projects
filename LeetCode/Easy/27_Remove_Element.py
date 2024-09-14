@@ -23,6 +23,8 @@ change list
 2. if nums[i] == val, pop it off the list
 3. else increase i and count
 """
+
+
 def removeElement(nums, val):
     i = 0
     count = 0
@@ -34,6 +36,7 @@ def removeElement(nums, val):
             count = count + 1
     return count
 
+
 """
 second solution:
 (20ms/44.37%)(13.26MB/56.53%)
@@ -43,6 +46,8 @@ replace in place
 3. if nums[i] != val move it to nums[index]
 4. return j which is count of non val
 """
+
+
 def removeElement_2(nums, val):
     index = 0
     for i in range(len(nums)):
@@ -51,16 +56,20 @@ def removeElement_2(nums, val):
             index += 1
     return index
 
+
 """
 solution(not in place):
 (11ms/96.17%)(13.36MB/24.08%)
 use python to reformat the list
 """
+
+
 def removeElement_3(nums, val):
     nums[:] = [num for num in nums if num != val]
     return len(nums)
 
+
 if __name__ == "__main__":
-    nums = [2,3,5]
+    nums = [2, 3, 5]
     val = 3
-    print(removeElement(nums,val))
+    print(removeElement(nums, val))

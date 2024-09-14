@@ -15,6 +15,8 @@ dictify and compare
 1. add all chars of s into a dict
 2. compare chars of t to dict
 """
+
+
 def isAnagram(s, t):
     if len(s) != len(t):
         return False
@@ -30,25 +32,29 @@ def isAnagram(s, t):
                 return False
     return True
 
+
 """
 second solution:
 very slow
 1. convert strings into lists and alphanumerically sort
 2. compare by popping off of each list
 """
+
+
 def isAnagram_2(s, t):
     if len(s) != len(t):
         return False
     x = list(s)
     y = list(t)
     x.sort(), y.sort()
-    print(x,y)
+    print(x, y)
     while x and y:
         if x.pop() != y.pop():
             return False
     return True
 
+
 if __name__ == "__main__":
     s = "rat"
     t = "car"
-    print(isAnagram(s,t))
+    print(isAnagram(s, t))

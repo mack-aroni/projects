@@ -17,13 +17,16 @@ index comparison
 3. iterate to midpoint checking front
 and back chars for similarity
 """
+
+
 def isPalindrome(s):
     s = s.strip(" ").lower()
-    s = ''.join(filter(str.isalnum, str(s)))
-    for i in range(len(s)>>2-1):
-        if s[i] != s[len(s)-1-i]:
+    s = "".join(filter(str.isalnum, str(s)))
+    for i in range(len(s) >> 2 - 1):
+        if s[i] != s[len(s) - 1 - i]:
             return False
     return True
+
 
 """
 second solution:
@@ -34,11 +37,14 @@ all non-alphanumeric chars
 3. iterate to midpoint checking front
 and back chars for similarity
 """
+
+
 def isPalindrome_2(s):
-    #removes spaces, non-alphanumeric and sets lower
+    # removes spaces, non-alphanumeric and sets lower
     s = [c.lower() for c in s if c.isalnum()]
-    #~i is -i-1 aka opposing char
-    return all (s[i] == s[~i] for i in range(len(s)//2))
+    # ~i is -i-1 aka opposing char
+    return all(s[i] == s[~i] for i in range(len(s) // 2))
+
 
 if __name__ == "__main__":
     s = "A man, a plan, a canal: Panama"

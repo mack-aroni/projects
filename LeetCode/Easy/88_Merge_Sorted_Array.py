@@ -24,14 +24,16 @@ increment i
 4. at the end if nums2 is not empty, add it to the 
 remaining slots in nums1
 """
+
+
 def merge(nums1, m, nums2, n):
     i = 0
-    #i < m+(n-len(nums2)) is if an index of nums2 isnt
-    #added to nums1, so i exceed that value
-    while nums2 and i < m+(n-len(nums2)):
-        print(nums1,nums2,i)
+    # i < m+(n-len(nums2)) is if an index of nums2 isnt
+    # added to nums1, so i exceed that value
+    while nums2 and i < m + (n - len(nums2)):
+        print(nums1, nums2, i)
         if nums2[0] < nums1[i]:
-            nums1.insert(i,nums2.pop(0))
+            nums1.insert(i, nums2.pop(0))
             nums1.pop()
         i = i + 1
     if nums2:
@@ -39,6 +41,7 @@ def merge(nums1, m, nums2, n):
             nums1[i] = x
             i = i + 1
     return nums1
+
 
 """
 second solution:
@@ -58,6 +61,8 @@ or end slots)
 4. continue decrementing k
 (loop should end before k < 0)
 """
+
+
 def merge_2(nums1, m, nums2, n):
     i = m - 1
     j = n - 1
@@ -72,22 +77,22 @@ def merge_2(nums1, m, nums2, n):
         k -= 1
     return nums1
 
+
 if __name__ == "__main__":
     nums1 = [0]
     m = 0
     nums2 = [1]
     n = 1
-    print(merge(nums1,m,nums2,n))
+    print(merge(nums1, m, nums2, n))
 
-    nums1 = [1,2,3,0,0,0]
+    nums1 = [1, 2, 3, 0, 0, 0]
     m = 3
-    nums2 = [2,5,6]
+    nums2 = [2, 5, 6]
     n = 3
-    print(merge(nums1,m,nums2,n))
+    print(merge(nums1, m, nums2, n))
 
-    nums1 = [4,0,0,0,0,0]
+    nums1 = [4, 0, 0, 0, 0, 0]
     m = 1
-    nums2 = [1,2,3,5,6]
+    nums2 = [1, 2, 3, 5, 6]
     n = 5
-    print(merge(nums1,m,nums2,n))
-
+    print(merge(nums1, m, nums2, n))

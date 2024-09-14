@@ -16,13 +16,16 @@ memoization/tabulation
 / represents number of ways that the number can be formed
 4. return memo[i] / which is number n
 """
+
+
 def climbStairs(n):
     count = 0
-    memo = [0 for i in range(n//1 + 1)]
+    memo = [0 for i in range(n // 1 + 1)]
     memo[0] = memo[1] = 1
-    for i in range(2,len(memo)):
-        memo[i] = memo[i-1] + memo[i-2]
+    for i in range(2, len(memo)):
+        memo[i] = memo[i - 1] + memo[i - 2]
     return memo[i]
+
 
 """
 second solution:
@@ -32,14 +35,17 @@ memoization without table
 2. set prev to 1, iterate from 1 to n+1
 3. move value of prev to prev and set prev to prev + prev2
 """
+
+
 def climbStairs_2(n):
     prev = 1
     prev2 = 0
-    for i in range(1, n+1):
+    for i in range(1, n + 1):
         cur = prev + prev2
         prev2 = prev
         prev = cur
-    return prev 
+    return prev
+
 
 if __name__ == "__main__":
     n = 4
